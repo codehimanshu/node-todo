@@ -21,8 +21,22 @@ todoRoutes
 	todo.name = req.body.name
 	todo.done = false
 	todo.save()
-	// .catch(err=>console.log(err))
 	res.send(todo)
 })
 
+todoRoutes
+.route('/update/:id')
+.post(async (req, res) => {
+	let todo = await Todo.findById(req.params.id)
+	todo.done = true
+	todo.save()
+	res.send(todo)
+})
+
+todoRoutes
+.route('/delete/:id')
+.post(async (req, res) => {
+	let todo = await Todo.deleteOne({_id:req.params.id})
+	res.send(todo)
+})
 module.exports = todoRoutes
