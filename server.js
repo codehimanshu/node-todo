@@ -6,10 +6,12 @@ var path = require('path')
 var app = express()	
 var mongoose = require('mongoose')
 var bodyParser = require('body-parser')
+var jwt = require('jsonwebtoken');
+var R = require('ramda')
 
-var config = require('./app/Config')
+var config = require('./config')
 
-mongoose.connect(config.DB)
+mongoose.connect(config.DB, { useNewUrlParser: true })
 
 app.use(express.static(path.join(__dirname, '/public')))
 
@@ -21,8 +23,10 @@ app.listen(port)
 
 console.log('App listening on port ' + port)
 
-var todoRoutes = require('./app/Routes')
-app.use('/api', todoRoutes)
+var todoRoutes = require('./routes/todoRoutes')
+var authRoutes = require('./routes/authRoutes')
+app.use('/todo', todoRoutes)
+app.use('/auth', authRoutes)
 
 app.use((req, res, next) => {
 	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:' + port)

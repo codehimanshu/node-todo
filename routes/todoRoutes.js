@@ -2,8 +2,7 @@
 
 var express = require('express')
 var todoRoutes = express.Router()
-var Todo = require('./Todo')
-
+var Todo = require('../app/models/todo')
 
 todoRoutes
 .route('/all')
