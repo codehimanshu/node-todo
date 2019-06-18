@@ -10,9 +10,14 @@ var bodyParser = require('body-parser');
 // var R = require('ramda');
 const { ApolloServer, gql } = require('apollo-server-express')
 const { typeDefs, resolvers } = require('./schema')
+const { graphAuthenticate } = require('./app/middleware/auth')
 
 const server = new ApolloServer({
-  context: req => req.req,
+  context: async ({req}) => {
+    const token = req.headers['x-auth'] || '';
+    var user = await graphAuthenticate(token)
+    return {user}
+  },
   typeDefs,
   resolvers,
 });
@@ -22,6 +27,8 @@ server.applyMiddleware({ app });
 var config = require('./config');
 
 mongoose.connect(config.DB, { useNewUrlParser: true });
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
 
 app.use(express.static(path.join(__dirname, '/public')));
 
