@@ -8,6 +8,16 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 // var jwt = require('jsonwebtoken');
 // var R = require('ramda');
+const { ApolloServer, gql } = require('apollo-server-express')
+const { typeDefs, resolvers } = require('./schema')
+
+const server = new ApolloServer({
+  context: req => req.req,
+  typeDefs,
+  resolvers,
+});
+
+server.applyMiddleware({ app });
 
 var config = require('./config');
 

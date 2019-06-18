@@ -8,9 +8,12 @@
 		"pretest": "eslint --fix --ignore-path .gitignore ."
 	},
 	"dependencies": {
+		"apollo-server": "^2.6.3",
+		"apollo-server-express": "^2.6.3",
 		"bcryptjs": "^2.4.3",
 		"body-parser": "^1.5.2",
 		"express": "~4.17.1",
+		"graphql": "^14.3.1",
 		"jsonwebtoken": "^8.5.1",
 		"method-override": "~3.0.0",
 		"mongoose": "~5.6.0",

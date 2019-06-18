@@ -2,6 +2,7 @@
 
 const validator = require('validator');
 const { APP_SECRET } = require('../../config');
+const Todo = require('./todo');
 var mongoose = require('mongoose');
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
@@ -43,6 +44,10 @@ var user = new mongoose.Schema({
       type: String,
       required: true,
     },
+  }],
+  todos: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Todo',
   }],
 });
 

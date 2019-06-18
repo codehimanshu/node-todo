@@ -1,8 +1,11 @@
 'use strict';
 
-var User = require('../models/user');
+const User = require('../models/user');
+const { APP_SECRET } = require('../../config');
+const jwt = require('jsonwebtoken');
+const { AuthenticationError } = require('apollo-server-express')
 
-var authenticate = (req, res, next) => {
+var apiAuthenticate = (req, res, next) => {
   var token = req.header('x-auth');
   User.findByToken(token).then(user => {
     if (!user)
@@ -12,8 +15,24 @@ var authenticate = (req, res, next) => {
     next();
   })
     .catch(e => {
-      res.status(401).send("Unauthorized");
+      res.status(401).send('Unauthorized');
     });
 };
 
-module.exports = authenticate;
+var graphAuthenticate = (context) => {
+  const token = context.headers['x-auth']
+  if(token) {
+    try {
+      const {userId} = jwt.verify(token, APP_SECRET)
+      return userId
+    }catch(e){
+        throw new AuthenticationError('must authenticate')
+    }
+  }
+  throw new Error('Not Authenticated')
+};
+
+module.exports = {
+  apiAuthenticate,
+  graphAuthenticate,
+};
